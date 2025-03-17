@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Hotel Website</title>
+    <title>Modern Hotel Website</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Amplify Library -->
+    <script src="https://cdn.jsdelivr.net/npm/aws-amplify@4.3.10/dist/aws-amplify.min.js"></script>
     <style>
         /* Modern Dark Theme */
         :root {
@@ -261,6 +263,24 @@
     </div>
 
     <script>
+        // Initialize Amplify
+        Amplify.configure({
+            Auth: {
+                region: 'YOUR_AWS_REGION', // Replace with your AWS region
+                userPoolId: 'YOUR_USER_POOL_ID', // Replace with your User Pool ID
+                userPoolWebClientId: 'YOUR_CLIENT_ID', // Replace with your Client ID
+            },
+            API: {
+                endpoints: [
+                    {
+                        name: 'hotelAPI',
+                        endpoint: 'YOUR_API_ENDPOINT', // Replace with your API endpoint
+                        region: 'YOUR_AWS_REGION', // Replace with your AWS region
+                    },
+                ],
+            },
+        });
+
         // Cart Data
         let cart = [];
 
@@ -328,16 +348,31 @@
         }
 
         // Function to place order
-        function placeOrder() {
+        async function placeOrder() {
             if (cart.length === 0) {
                 alert('Your cart is empty!');
                 return;
             }
-            alert('Order placed successfully!');
-            cart = [];
-            updateCartDisplay();
-            document.getElementById('paybill').classList.add('hidden');
-            toggleCart();
+
+            const order = {
+                items: cart,
+                timestamp: new Date().toISOString(),
+            };
+
+            try {
+                // Send order to AWS Amplify API
+                const response = await Amplify.API.post('hotelAPI', '/orders', {
+                    body: order,
+                });
+                alert('Order placed successfully!');
+                cart = [];
+                updateCartDisplay();
+                document.getElementById('paybill').classList.add('hidden');
+                toggleCart();
+            } catch (error) {
+                console.error('Error placing order: ', error);
+                alert('Failed to place order. Please try again.');
+            }
         }
     </script>
 </body>
