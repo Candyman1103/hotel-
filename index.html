@@ -264,22 +264,23 @@
 
     <script>
         // Initialize Amplify
-        Amplify.configure({
-            //Auth: {
-                //region: 'YOUR_AWS_REGION', // Replace with your AWS region
-                //userPoolId: 'YOUR_USER_POOL_ID', // Replace with your User Pool ID
-               //userPoolWebClientId: 'YOUR_CLIENT_ID', // Replace with your Client ID
-            //},
+       Amplify.configure({
+             Auth: {
+                region: 'ap-southeast-2', 
+                userPoolId: 'ap-southeast-2_0wFgEBDS9', 
+                userPoolWebClientId: '1ct613j2egbrco42esk7cbk6bn'
+            },
             API: {
                 endpoints: [
                     {
                         name: 'hotelAPI',
-                        endpoint: 'https://ovcwacn14j.execute-api.ap-southeast-2.amazonaws.com/prod', // Replace with your API endpoint
-                        region: 'ap-southeast-2', // Replace with your AWS region
+                        endpoint: 'https://ovcwacn14j.execute-api.ap-southeast-2.amazonaws.com/prod',
+                        region: 'ap-southeast-2',
                     },
                 ],
             },
         });
+
 
         // Cart Data
         let cart = [];
